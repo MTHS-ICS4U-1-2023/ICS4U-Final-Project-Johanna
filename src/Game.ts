@@ -6,10 +6,13 @@ export class Game extends Scene
     background: Phaser.GameObjects.Image;
     msg_text : Phaser.GameObjects.Text;
 
+    // dimentions of tetris game
+    
     constructor ()
     {
         super('Game');
     }
+
 
     create ()
     {
@@ -22,4 +25,5 @@ export class Game extends Scene
 
         });
     }
+
 }
