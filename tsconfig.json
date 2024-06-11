@@ -25,7 +25,7 @@
     },
     "include": [
         "src"
-    ],
+, "src/scenes/Basic.ts", "src/main.ts"    ],
     "exclude": [
         "node_modules",
         "docs"
