@@ -9,9 +9,9 @@ let coodinateArray: Coordinates[][] = [...Array(gBoardHeight)].map(e => Array(gB
 .fill(0))
 let curTetromino: number[][] = [[1,0], [0,1], [1,1], [2,1]]
 
-let tetrominos: number[][] = []
+let tetrominos: number[][][] = []
 let tetrominoColors = ['purple', 'cyan', 'blue', 'yellow', 'orange', 'green', 'red']
-let curTetrominoColor: string[][]
+let curTetrominoColor: string
 
 let gameBoardArray = [...Array(gBoardHeight)].map(e => Array(gBoardWidth).fill(0))
 
@@ -54,7 +54,7 @@ function SetupCanvas(){
     canvas.width = 936
     canvas.height = 956
 
-    ctx.scale(2,2)
+    ctx.scale(1.5,1.5)
 
     ctx.fillStyle = 'white'
     ctx.fillRect(0,0,canvas.width, canvas.height)
@@ -71,10 +71,12 @@ function SetupCanvas(){
 }
 
 function DrawTetromino() {
-    for(let counter = 0; counter < curTetromino.length; counter++) {
-        let xCoord = curTetromino[counter][0] + startX
-        let yCoord = curTetromino[counter][1] + startY
+    for(let i = 0; i < curTetromino.length; i++) {
+        // location where tetromino shows
+        let xCoord = curTetromino[i][0] + startX
+        let yCoord = curTetromino[i][1] + startY
         gameBoardArray[xCoord][yCoord] = 1
+
         let coorX = coodinateArray[xCoord][yCoord].xCoord
         let coorY = coodinateArray[xCoord][yCoord].yCoord
         ctx.fillStyle = curTetrominoColor
@@ -114,17 +116,26 @@ function DeleteTetromino() {
 
 function CreateTetrominos() {
     // T
-    tetrominos.push([1,0], [0,1], [1,1], [2,1])
+    tetrominos.push([[1,0], [0,1], [1,1], [2,1]])
     // I
-    tetrominos.push([0,0], [1,0], [2,0], [3,0])
+    tetrominos.push([[0,0], [1,0], [2,0], [3,0]])
     // J
-    tetrominos.push([0,0], [0,1], [1,1], [2,1])
+    tetrominos.push([[0,0], [0,1], [1,1], [2,1]])
     // O
-    tetrominos.push([0,0], [1,0], [0,1], [1,1])
+    tetrominos.push([[0,0], [1,0], [0,1], [1,1]])
     // L
-    tetrominos.push([2,0], [0,1], [1,1], [2,1])
+    tetrominos.push([[2,0], [0,1], [1,1], [2,1]])
     // Z
-    tetrominos.push([1,0], [2,0], [0,1], [1,1])
+    tetrominos.push([[1,0], [2,0], [0,1], [1,1]])
     // Z
-    tetrominos.push([0,0], [1,0], [1,1], [2,1])
+    tetrominos.push([[0,0], [1,0], [1,1], [2,1]])
+}
+
+function CreateTetromino() {
+    // Get a random tetromino index
+    let randomTetromino = Math.floor(Math.random() * tetrominos.length);
+    // Set the one to draw
+    curTetromino = tetrominos[randomTetromino];
+    // Get the color for it
+    curTetrominoColor = tetrominoColors[randomTetromino];
 }
