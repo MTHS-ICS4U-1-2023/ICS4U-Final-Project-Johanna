@@ -1,34 +1,33 @@
-let canvas
+let canvas: HTMLCanvasElement
 let ctx: CanvasRenderingContext2D
-let gBoardHeight = 20
-let gBoardWidth = 10
+const gBoardHeight = 20
+const gBoardWidth = 10
 // starting point on board
 let startX = 4
 let startY = 0
-let coodinateArray: Coordinates[][] = [...Array(gBoardHeight)].map(e => Array(gBoardWidth)
-.fill(0))
+let coordinateArray: Coordinates[][] = [...Array(gBoardHeight)].map(e => Array(gBoardWidth).fill(0))
 let curTetromino: number[][] = [[1,0], [0,1], [1,1], [2,1]]
 
-let tetrominos: number[][][] = []
-let tetrominoColors = ['purple', 'cyan', 'blue', 'yellow', 'orange', 'green', 'red']
+const tetrominos: number[][][] = []
+const tetrominoColors = ['purple', 'cyan', 'blue', 'yellow', 'orange', 'green', 'red']
 let curTetrominoColor: string
 
-let gameBoardArray = [...Array(gBoardHeight)].map(e => Array(gBoardWidth).fill(0))
+const gameBoardArray = [...Array(gBoardHeight)].map(e => Array(gBoardWidth).fill(0))
 
-let DIRECTION = {
+const DIRECTION = {
     IDLE: 0,
     DOWN: 1,
     LEFT: 2,
     RIGHT: 3,
 }
 
-let direction
+let direction = DIRECTION.IDLE
 
-class Coordinates{
+class Coordinates {
     public xCoord: number
     public yCoord: number
 
-    constructor(xCoord: number,yCoord: number){
+    constructor(xCoord: number, yCoord: number) {
         this.xCoord = xCoord
         this.yCoord = yCoord
     }
@@ -36,11 +35,11 @@ class Coordinates{
 
 document.addEventListener('DOMContentLoaded', SetupCanvas)
 
-function CreateCoodArray() {
+function CreateCoordinateArray() {
     let i = 0, j = 0
-    for(let counter = 9; counter <= 446; counter += 23) {
-        for(let counter2 = 11; counter2 <= 264; counter2 += 23) {
-            coodinateArray[i][j] = new Coordinates(counter2,counter)
+    for (let counter = 9; counter <= 446; counter += 23) {
+        for (let counter2 = 11; counter2 <= 264; counter2 += 23) {
+            coordinateArray[i][j] = new Coordinates(counter2, counter)
             i++
         }
         j++
@@ -48,44 +47,44 @@ function CreateCoodArray() {
     }
 }
 
-function SetupCanvas(){
-    const canvas = <HTMLCanvasElement> document.getElementById('my-canvas')
-    const ctx = <CanvasRenderingContext2D> canvas.getContext('2d') 
+function SetupCanvas() {
+    canvas = <HTMLCanvasElement>document.getElementById('my-canvas')
+    ctx = <CanvasRenderingContext2D>canvas.getContext('2d')
     canvas.width = 936
     canvas.height = 956
 
-    ctx.scale(1.5,1.5)
+    ctx.scale(1.5, 1.5)
 
     ctx.fillStyle = 'white'
-    ctx.fillRect(0,0,canvas.width, canvas.height)
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
 
     ctx.strokeStyle = 'black'
-    ctx.strokeRect(8,8,280,462)
+    ctx.strokeRect(8, 8, 280, 462)
 
     document.addEventListener('keydown', HandleKeyPress)
     CreateTetrominos()
-    //CreateTetromino()
+    CreateTetromino()
 
-    CreateCoodArray()
+    CreateCoordinateArray()
     DrawTetromino()
 }
 
 function DrawTetromino() {
-    for(let i = 0; i < curTetromino.length; i++) {
+    for (let i = 0; i < curTetromino.length; i++) {
         // location where tetromino shows
         let xCoord = curTetromino[i][0] + startX
         let yCoord = curTetromino[i][1] + startY
         gameBoardArray[xCoord][yCoord] = 1
 
-        let coorX = coodinateArray[xCoord][yCoord].xCoord
-        let coorY = coodinateArray[xCoord][yCoord].yCoord
+        let coorX = coordinateArray[xCoord][yCoord].xCoord
+        let coorY = coordinateArray[xCoord][yCoord].yCoord
         ctx.fillStyle = curTetrominoColor
         ctx.fillRect(coorX, coorY, 21, 21)
     }
 }
 
 function HandleKeyPress(key: KeyboardEvent) {
-    if(key.keyCode === 65) {
+    if (key.keyCode === 65) {
         direction = DIRECTION.LEFT
         DeleteTetromino()
         startX--
@@ -104,12 +103,13 @@ function HandleKeyPress(key: KeyboardEvent) {
 }
 
 function DeleteTetromino() {
-    for(let counter = 0; counter < curTetromino.length; counter++) {
+    for (let counter = 0; counter < curTetromino.length; counter++) {
         let xVal = curTetromino[counter][0] + startX
         let yVal = curTetromino[counter][1] + startY
         gameBoardArray[xVal][yVal] = 0
-        let coorX = coodinateArray[xVal][yVal].xCoord
-        let coorY = coodinateArray[xVal][yVal].yCoord
+        let coorX = coordinateArray[xVal][yVal].xCoord
+        let coorY = coordinateArray[xVal][yVal].yCoord
+        ctx.fillStyle = 'white' // Use white to clear the previous block
         ctx.fillRect(coorX, coorY, 21, 21)
     }
 }
@@ -127,15 +127,15 @@ function CreateTetrominos() {
     tetrominos.push([[2,0], [0,1], [1,1], [2,1]])
     // Z
     tetrominos.push([[1,0], [2,0], [0,1], [1,1]])
-    // Z
+    // S
     tetrominos.push([[0,0], [1,0], [1,1], [2,1]])
 }
 
 function CreateTetromino() {
     // Get a random tetromino index
-    let randomTetromino = Math.floor(Math.random() * tetrominos.length);
+    let randomTetromino = Math.floor(Math.random() * tetrominos.length)
     // Set the one to draw
-    curTetromino = tetrominos[randomTetromino];
+    curTetromino = tetrominos[randomTetromino]
     // Get the color for it
-    curTetrominoColor = tetrominoColors[randomTetromino];
+    curTetrominoColor = tetrominoColors[randomTetromino]
 }
